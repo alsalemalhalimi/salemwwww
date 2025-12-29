@@ -1,0 +1,50 @@
+# ملفات نظام التشغيل
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# بيئة Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ملفات البيئة
+.env
+.env.local
+.env.production
+.env.development
+
+# ملفات IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ملفات النظام
+data/*.json
+!data/student-results.json
+!data/professor-results.json
+!data/combined-analysis.json
+
+# ملفات مؤقتة
+tmp/
+temp/
+
+# ملفات الاختبار
+coverage/
+.nyc_output
+
+# ملفات البناء
+dist/
+build/
+out/
+
+# ملفات السجل
+logs/
+*.log
+
+# ملفات النظام
+*.pid
+*.seed
+*.pid.lock

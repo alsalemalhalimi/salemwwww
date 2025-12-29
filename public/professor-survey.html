@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>استبيان الهيئة التدريسية - نظام LMS المتكامل</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Tahoma', 'Geneva', 'Verdana', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        /* شريط التقدم */
+        
+        .progress-container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .progress-bar {
+            height: 10px;
+            background: #ecf0f1;
+            border-radius: 5px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+        
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, #e74c3c, #c0392b);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        /* نموذج الاستبيان */
+        
+        .survey-form {
+            background: rgba(255, 255, 255, 0.98);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+        }
+        
+        .form-header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #e74c3c;
+            padding-bottom: 20px;
+        }
+        
+        .form-header h1 {
+            font-size: 2.2em;
+            color: #1a2980;
+            margin-bottom: 10px;
+        }
+        
+        .form-header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+        
+        .form-section {
+            margin-bottom: 40px;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border-right: 5px solid #3498db;
+        }
+        
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: #2c3e50;
+            margin-bottom: 25px;
+            font-size: 1.4em;
+        }
+        
+        .section-title i {
+            color: #e74c3c;
+            font-size: 1.3em;
+        }
+        
+        .question-group {
+            margin-bottom: 25px;
+        }
+        
+        .question {
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+        
+        .required::after {
+            content: " *";
+            color: #e74c3c;
+        }
+        /* أنوع المدخلات */
+        
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .option-label {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .option-label:hover {
+            border-color: #3498db;
+            background: #f0f7ff;
+        }
+        
+        .option-label input:checked+.option-content {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        
+        .option-content {
+            margin-right: 10px;
+            flex-grow: 1;
+        }
+        
+        input[type="radio"],
+        input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+        
+        .rating-scale {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .rating-item {
+            flex: 1;
+            text-align: center;
+            padding: 15px;
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .rating-item:hover {
+            border-color: #3498db;
+            transform: translateY(-3px);
+        }
+        
+        .rating-item.active {
+            background: #e74c3c;
+            color: white;
+            border-color: #c0392b;
+        }
+        
+        .rating-value {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .rating-label {
+            font-size: 0.9em;
+        }
+        
+        textarea,
+        select,
+        input[type="text"],
+        input[type="email"] {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 1em;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        textarea:focus,
+        select:focus,
+        input:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+        
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        /* أزرار التنقل */
+        
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px solid #eee;
+        }
+        
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .btn-prev {
+            background: #95a5a6;
+            color: white;
+        }
+        
+        .btn-prev:hover {
+            background: #7f8c8d;
+        }
+        
+        .btn-next {
+            background: #3498db;
+            color: white;
+        }
+        
+        .btn-next:hover {
+            background: #2980b9;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(52, 152, 219, 0.3);
+        }
+        
+        .btn-submit {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+        }
+        
+        .btn-submit:hover {
+            background: linear-gradient(135deg, #c0392b, #a93226);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(231, 76, 60, 0.3);
+        }
+        /* إشعارات */
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            display: none;
+            z-index: 1000;
+            max-width: 400px;
+            border-right: 5px solid #e74c3c;
+        }
+        
+        .notification.success {
+            border-color: #2ecc71;
+        }
+        
+        .notification.error {
+            border-color: #e74c3c;
+        }
+        /* متجاوب */
+        
+        @media (max-width: 768px) {
+            .survey-form {
+                padding: 25px;
+            }
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+            .rating-scale {
+                flex-direction: column;
+            }
+            .nav-buttons {
+                flex-direction: column;
+                gap: 15px;
+            }
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- شريط التقدم -->
+        <div class="progress-container">
+            <div class="progress-text">
+                <span>استبيان الهيئة التدريسية</span>
+                <span id="currentStep">1/5</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress" id="progressBar"></div>
+            </div>
+        </div>
+
+        <!-- نموذج الاستبيان -->
+        <form id="surveyForm" class="survey-form">
+            <!-- القسم 1: المعلومات الشخصية -->
+            <div class="form-section" id="section1">
+                <div class="section-title">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                    <h2>المعلومات الشخصية</h2>
+                </div>
+
+                <div class="question-group">
+                    <label class="question required">الاسم الكامل</label>
+                    <input type="text" id="fullName" name="fullName" required placeholder="أدخل اسمك الكامل">
+                </div>
+
+                <div class="question-group">
+                    <label class="question required">القسم/الكلية</label>
+                    <input type="text" id="department" name="department" required placeholder="أدخل اسم القسم أو الكلية">
+                </div>
+
+                <div class="question-group">
+                    <label class="question required">البريد الإلكتروني الجامعي</label>
+                    <input type="email" id="email" name="email" required placeholder="name@university.edu.sa">
+                </div>
+
+                <div class="question-group">
+                    <label class="question required">الرتبة الأكاديمية</label>
+                    <div class="options-grid">
+                        <label class="option-label">
+                            <input type="radio" name="academicRank" value="أستاذ" required>
+                            <span class="option-content">أستاذ</span>
+                        </label>
+                        <label class="option-label">
+                            <input type="radio" name="academicRank" value="أستاذ مشارك">
+                            <span class="option-content">أستاذ مشارك</span>
+                        </label>
+                        <label class="option-label">
+                            <input type="radio" name="academicRank" value="أستاذ مساعد">
+                            <span class="option-content">أستاذ مساعد</span>
+                        </label>
+                        <label class="option-label">
+                            <input type="radio" name="academicRank" value="محاضر">
+                            <span class="option-content">محاضر</span>
+                        </label>
+                        <label class="option-label">
+                            <input type="radio" name="academicRank" value="معيد">
+                            <span class="option-content">معيد</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="question-group">
+                    <label class="question required">سنوات الخبرة في التدريس</label>
+                    <div class="options-grid">
+                        <label class="option-label">
+                            <input type="radio" name="teachingExperience" value="أقل من 5 سنوات" required>
+                            <span class="option-content">أقل من 5 سنوات</span>
+                        </label>
+                        <label class="option-label">
+                            <input type="radio" name="teachingExperience" value="5-10 سنوات">
+                            <span class="option-content">5-10 سنوات</span>
+                        </label>
+                        <label class="option-label">
+                            <input type="radio" name="teachingExperience" value="10-15 سنة">
+                            <span class="option-content">10-15 سنة</span>
+                        </label>
+                        <label class="option-label">
+                            <input type="radio" name="teachingExperience" value="أكثر من 15 سنة">
+                            <span class="option-content">أكثر من 15 سنة</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- القسم 2: تجربة التعليم الإلكتروني -->
+            <div class="form-section" id="section2" style="display: none;">
+                <div class="section-title">
+                    <i class="fas fa-laptop-house"></i>
+                    <h2>تجربة التعليم الإلكتروني</h2>
+                </div>
+
+                <div class="question-group">
+                    <label class="question required">كم عدد المقررات التي تدرسها إلكترونياً؟</label>
+                    <div class="options-grid">
+                        <label class="option-label">
+                            <input type="radio" name="onlineCourses" value="جميع المقررات" required>
+                            <span class="option-content">جميع المقررات</span>
+                        </label>
+                        <label class="option-label">
+                            <input type="radio" name="onlineCourses" value="أكثر من 50%">
+                            <span class="option-content">أكثر من 50%</span>
+                        </label>
+                        <label class="option-label">
+                            <input type="radio" name="onlineCourses" value="أقل من 50%">
+                            <span class="option-content">أقل من 50%</span>
+                        </label>
+                        <label class="option-label">
+                            <input type="radio" name="onlineCourses" value="لا شيء">
+                            <span class="option-content">لا شيء</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="question-group">
+                    <label class="question required">ما هي أكبر تحديات التعليم الإلكتروني؟ (اختر 3 كحد أقصى)</label>
+                    <div class="options-grid">
+                        <label class="option-label">
+                            <input type="checkbox" name="teachingChallenges" value="تفاعل الطلاب">
+                            <span class="option-content">تفاعل الطلاب</span>
+                        </label>
+                        <label class="option-label">
+                            <input type="checkbox" name="teachingChallenges" value="متابعة الحضور">
+                            <span class="option-content">متابعة الحضور</span>
+                        </label>
+                        <label class="option-label">
+                            <input type="checkbox" name="teachingChallenges" value="مراقبة الاختبارات">
+                            <span class="option-content">مراقبة الاختبارات</span>
+                        </label>
+                        <label class="option-label">
+                            <input type="checkbox" name="teachingChallenges" value="تقييم الأداء">
+                            <span class="option-content">تقييم الأداء</span>
+                        </label>
+                        <label class="option-label">
+                            <input type="checkbox" name="teachingChallenges" value="التقنية">
+                            <span class="option-content">مشاكل تقنية</span>
+                        </label>
+                        <label class="option-label">
+                            <input type="checkbox" name="teachingChallenges" value="الوقت">
+                            <span class="option-content">الوقت والجهد</span>
+                        </label>
+                        <label class="option-label">
+                            <input type="checkbox" name="teachingChallenges" value="الغش">
+                            <span class="option-content">مشكلة الغش</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="question-group">
+                    <label class="question required">ما مدى فعالية النظام الحالي في إدارة التعليم الإلكتروني؟</label>
+                    <div class="rating-scale">
+                        <div class="rating-item" data-value="5">
+                            <div class="rating-value">5</div>
+                            <div class="rating-label">ممتازة</div>
+                        </div>
+                        <div class="rating-item" data-value="4">
+                            <div class="rating-value">4</div>
+                            <div class="rating-label">جيدة جداً</div>
+                        </div>
+                        <div class="rating-item" data-value="3">
+                            <div class="rating-value">3</div>
+                            <div class="rating-label">جيدة</div>
+                        </div>
+                        <div class="rating-item" data-value="2">
+                            <div class="rating-value">2</div>
+                            <div class="rating-label">مقبولة</div>
+                        </div>
+                        <div class="rating-item" data-value="1">
+                            <div class="rating-value">1</div>
+                            <div class="rating-label">ضعيفة</div>
+                        </div>
+                    </div>
+                    <input type="hidden" id="currentSystemEffectiveness" name="currentSystemEffectiveness">
+                </div>
+            </div>
+
+            <!-- القسم 3: متطلبات النظام الجديد -->
+            <div class="form-section" id="section3" style="display: none;">
+                <div class="section-title">
+                    <i class="fas fa-tools"></i>
+                    <h2>متطلبات النظام الجديد</h2>
+                </div>
+
+                <div class="question-group">
+                    <label class="question required">ما مدى أهمية الميزات التالية؟ (1 = غير مهم، 5 = مهم جداً)</label>
+
+                    <div class="feature-rating">
+                        <div style="margin-bottom: 20px;">
+                            <label>1. نظام إدارة المحاضرات المتكامل</label>
+                            <div class="rating-scale small">
+                                <div class="rating-item" data-value="1">1</div>
+                                <div class="rating-item" data-value="2">2</div>
+                                <div class="rating-item" data-value="3">3</div>
+                                <div class="rating-item" data-value="4">4</div>
+                                <div class="rating-item" data-value="5">5</div>
+                            </div>
+                            <input type="hidden" name="reqLectures" class="feature-rating-input">
+                        </div>
+
+                        <div style="margin-bottom: 20px;">
+                            <label>2. نظام التحضير الآلي المتقدم</label>
+                            <div class="rating-scale small">
+                                <div class="rating-item" data-value="1">1</div>
+                                <div class="rating-item" data-value="2">2</div>
+                                <div class="rating-item" data-value="3">3</div>
+                                <div class="rating-item" data-value="4">4</div>
+                                <div class="rating-item" data-value="5">5</div>
+                            </div>
+                            <input type="hidden" name="reqAttendance" class="feature-rating-input">
+                        </div>
+
+                        <div style="margin-bottom: 20px;">
+                            <label>3. نظام مراقبة الاختبارات العملية</label>
+                            <div class="rating-scale small">
+                                <div class="rating-item" data-value="1">1</div>
+                                <div class="rating-item" data-value="2">2</div>
+                                <div class="rating-item" data-value="3">3</div>
+                                <div class="rating-item" data-value="4">4</div>
+                                <div class="rating-item" data-value="5">5</div>
+                            </div>
+                            <input type="hidden" name="reqMonitoring" class="feature-rating-input">
+                        </div>
+
+                        <div style="margin-bottom: 20px;">
+                            <label>4. نظام إدارة الاختبارات الإلكترونية</label>
+                            <div class="rating-scale small">
+                                <div class="rating-item" data-value="1">1</div>
+                                <div class="rating-item" data-value="2">2</div>
+                                <div class="rating-item" data-value="3">3</div>
+                                <div class="rating-item" data-value="4">4</div>
+                                <div class="rating-item" data-value="5">5</div>
+                            </div>
+                            <input type="hidden" name="reqExams" class="feature-rating-input">
+                        </div>
+
+                        <div style="margin-bottom: 20px;">
+                            <label>5. نظام إدارة الأنشطة والمشاريع</label>
+                            <div class="rating-scale small">
+                                <div class="rating-item" data-value="1">1</div>
+                                <div class="rating-item" data-value="2">2</div>
+                                <div class="rating-item" data-value="3">3</div>
+                                <div class="rating-item" data-value="4">4</div>
+                                <div class="rating-item" data-value="5">5</div>
+                            </div>
+                            <input type="hidden" name="reqActivities" class="feature-rating-input">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question-group">
+                    <label class="question">ما هو نظام التحضير المفضل لديك؟</label>
+                    <div class="options-grid">
+                        <label class="option-label">
+                            <input type="radio" name="preferredAttendanceMethod" value="QR Code">
+                            <span class="option-content">QR Code</span>
+                        </label>
+                        <label class="option-label">
+                            <input type="radio" name="preferredAttendanceMethod" value="تحضير تلقائي">
+                            <span class="option-content">تحضير تلقائي</span>
+                        </label>
+                        <label class="option-label">
+                            <input type="radio" name="preferredAttendanceMethod" value="تحديد الموقع">
+                            <span class="option-content">تحديد الموقع</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="question-group">
+                    <label class="question">ما مدى فعالية نظام مراقبة الاختبارات في منع الغش؟</label>
+                    <div class="rating-scale">
+                        <div class="rating-item" data-value="5">
+                            <div class="rating-value">5</div>
+                            <div class="rating-label">فعال جداً</div>
+                        </div>
+                        <div class="rating-item" data-value="4">
+                            <div class="rating-value">4</div>
+                            <div class="rating-label">فعال</div>
+                        </div>
+                        <div class="rating-item" data-value="3">
+                            <div class="rating-value">3</div>
+                            <div class="rating-label">متوسط</div>
+                        </div>
+                        <div class="rating-item" data-value="2">
+                            <div class="rating-value">2</div>
+                            <div class="rating-label">ضعيف</div>
+                        </div>
+                        <div class="rating-item" data-value="1">
+                            <div class="rating-value">1</div>
+                            <div class="rating-label">غير فعال</div>
+                        </div>
+                    </div>
+                    <input type="hidden" id="cheatingPreventionEffectiveness" name="cheatingPreventionEffectiveness">
+                </div>
+            </div>
+
+            <!-- القسم 4: التحديات التقنية والإدارية -->
+            <div class="form-section" id="section4" style="display: none;">
+                <div class="section-title">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <h2>التحديات التقنية والإدارية</h2>
+                </div>
+
+                <div class="question-group">
+                    <label class="question required">ما هي أكبر عقبة تواجهها في استخدام الأنظمة الحالية؟</label>
+                    <textarea id="biggestObstacle" name="biggestObstacle" required placeholder="صف أكبر عقبة تواجهها..."></textarea>
+                </div>
+
+                <div class="question-group">
+                    <label class="question">هل واجهت مشاكل في متابعة حضور الطلاب؟</label>
+                    <div class="options-grid">
+                        <label class="option-label">
+                            <input type="radio" name="attendanceProblems" value="دائماً">
+                            <span class="option-content">دائماً</span>
+                        </label>
+                        <label class="option-label">
+                            <input type="radio" name="attendanceProblems" value="أحياناً">
+                            <span class="option-content">أحياناً</span>
+                        </label>
+                        <label class="option-label">
+                            <input type="radio" name="attendanceProblems" value="نادراً">
+                            <span class="option-content">نادراً</span>
+                        </label>
+                        <label class="option-label">
+                            <input type="radio" name="attendanceProblems" value="لا">
+                            <span class="option-content">لا</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="question-group">
+                    <label class="question">ما هي مشاكل الاختبارات الإلكترونية التي واجهتها؟</label>
+                    <div class="options-grid">
+                        <label class="option-label">
+                            <input type="checkbox" name="examProblems" value="الغش">
+                            <span class="option-content">الغش والمخالفات</span>
+                        </label>
+                        <label class="option-label">
+                            <input type="checkbox" name="examProblems" value="تقنية">
+                            <span class="option-content">مشاكل تقنية</span>
+                        </label>
+                        <label class="option-label">
+                            <input type="checkbox" name="examProblems" value="تقييم">
+                            <span class="option-content">صعوبة التقييم</span>
+                        </label>
+                        <label class="option-label">
+                            <input type="checkbox" name="examProblems" value="تصميم">
+                            <span class="option-content">تصميم الأسئلة</span>
+                        </label>
+                        <label class="option-label">
+                            <input type="checkbox" name="examProblems" value="مراقبة">
+                            <span class="option-content">صعوبة المراقبة</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="question-group">
+                    <label class="question">ما مدى توفر الدعم الفني في مؤسستك؟</label>
+                    <div class="options-grid">
+                        <label class="option-label">
+                            <input type="radio" name="techSupport" value="ممتاز">
+                            <span class="option-content">ممتاز ودائم</span>
+                        </label>
+                        <label class="option-label">
+                            <input type="radio" name="techSupport" value="جيد">
+                            <span class="option-content">جيد عند الحاجة</span>
+                        </label>
+                        <label class="option-label">
+                            <input type="radio" name="techSupport" value="محدود">
+                            <span class="option-content">محدود</span>
+                        </label>
+                        <label class="option-label">
+                            <input type="radio" name="techSupport" value="غير متوفر">
+                            <span class="option-content">غير متوفر</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- القسم 5: الاقتراحات والتوصيات -->
+            <div class="form-section" id="section5" style="display: none;">
+                <div class="section-title">
+                    <i class="fas fa-lightbulb"></i>
+                    <h2>الاقتراحات والتوصيات</h2>
+                </div>
+
+                <div class="question-group">
+                    <label class="question">ما هي الميزة الأكثر أهمية في نظام التحضير الآلي؟</label>
+                    <textarea id="mostImportantFeature" name="mostImportantFeature" placeholder="اكتب الميزة الأكثر أهمية..."></textarea>
+                </div>
+
+                <div class="question-group">
+                    <label class="question">هل ترى أن نظام العمل بدون إنترنت مهم؟</label>
+                    <div class="options-grid">
+                        <label class="option-label">
+                            <input type="radio" name="offlineImportance" value="مهم جداً">
+                            <span class="option-content">مهم جداً</span>
+                        </label>
+                        <label class="option-label">
+                            <input type="radio" name="offlineImportance" value="مهم">
+                            <span class="option-content">مهم</span>
+                        </label>
+                        <label class="option-label">
+                            <input type="radio" name="offlineImportance" value="عادي">
+                            <span class="option-content">عادي</span>
+                        </label>
+                        <label class="option-label">
+                            <input type="radio" name="offlineImportance" value="غير مهم">
+                            <span class="option-content">غير مهم</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="question-group">
+                    <label class="question">ما هي التحديات المتوقعة في تطبيق النظام الجديد؟</label>
+                    <textarea id="expectedChallenges" name="expectedChallenges" placeholder="اكتب التحديات المتوقعة..."></textarea>
+                </div>
+
+                <div class="question-group">
+                    <label class="question">هل لديك أي توصيات لإدارة المشروع؟</label>
+                    <textarea id="managementRecommendations" name="managementRecommendations" placeholder="اكتب توصياتك لإدارة المشروع..."></textarea>
+                </div>
+
+                <div class="question-group">
+                    <label class="question required">ما مدى فائدة النظام المقترح للعملية التعليمية؟</label>
+                    <div class="rating-scale">
+                        <div class="rating-item" data-value="5">
+                            <div class="rating-value">5</div>
+                            <div class="rating-label">مفيد جداً</div>
+                        </div>
+                        <div class="rating-item" data-value="4">
+                            <div class="rating-value">4</div>
+                            <div class="rating-label">مفيد</div>
+                        </div>
+                        <div class="rating-item" data-value="3">
+                            <div class="rating-value">3</div>
+                            <div class="rating-label">متوسط</div>
+                        </div>
+                        <div class="rating-item" data-value="2">
+                            <div class="rating-value">2</div>
+                            <div class="rating-label">قليل الفائدة</div>
+                        </div>
+                        <div class="rating-item" data-value="1">
+                            <div class="rating-value">1</div>
+                            <div class="rating-label">غير مفيد</div>
+                        </div>
+                    </div>
+                    <input type="hidden" id="systemUsefulness" name="systemUsefulness" required>
+                </div>
+
+                <div class="question-group">
+                    <label class="question">هل ترغب في المشاركة في تطوير النظام؟</label>
+                    <div class="options-grid">
+                        <label class="option-label">
+                            <input type="radio" name="developmentParticipation" value="نعم">
+                            <span class="option-content">نعم، أرغب بالمشاركة</span>
+                        </label>
+                        <label class="option-label">
+                            <input type="radio" name="developmentParticipation" value="لا">
+                            <span class="option-content">لا، لا أرغب</span>
+                        </label>
+                        <label class="option-label">
+                            <input type="radio" name="developmentParticipation" value="ربما">
+                            <span class="option-content">ربما لاحقاً</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- أزرار التنقل -->
+            <div class="nav-buttons">
+                <button type="button" class="btn btn-prev" id="prevBtn" onclick="prevSection()">
+                    <i class="fas fa-arrow-right"></i> السابق
+                </button>
+                <button type="button" class="btn btn-next" id="nextBtn" onclick="nextSection()">
+                    التالي <i class="fas fa-arrow-left"></i>
+                </button>
+                <button type="submit" class="btn btn-submit" id="submitBtn" style="display: none;">
+                    <i class="fas fa-paper-plane"></i> إرسال الاستبيان
+                </button>
+            </div>
+        </form>
+
+        <!-- إشعار النجاح -->
+        <div id="successNotification" class="notification success" style="display: none;">
+            <i class="fas fa-check-circle" style="color: #2ecc71; font-size: 1.5em; margin-bottom: 10px;"></i>
+            <h3 style="margin-bottom: 10px;">تم إرسال الاستبيان بنجاح!</h3>
+            <p>شكراً لمشاركتك القيمة كعضو هيئة تدريسية. مساهمتك أساسية في نجاح البحث.</p>
+            <div style="margin-top: 15px;">
+                <a href="/" style="color: #3498db; text-decoration: none; font-weight: bold;">
+                    <i class="fas fa-home"></i> العودة للرئيسية
+                </a>
+            </div>
+        </div>
+
+        <!-- إشعار الخطأ -->
+        <div id="errorNotification" class="notification error" style="display: none;">
+            <i class="fas fa-exclamation-circle" style="color: #e74c3c; font-size: 1.5em; margin-bottom: 10px;"></i>
+            <h3 style="margin-bottom: 10px;">حدث خطأ!</h3>
+            <p id="errorMessage">يرجى المحاولة مرة أخرى.</p>
+        </div>
+    </div>
+
+    <script>
+        // متغيرات التتبع
+        let currentSection = 1;
+        const totalSections = 5;
+        const startTime = Date.now();
+
+        // تهيئة الصفحة
+        function init() {
+            updateProgress();
+            showSection(currentSection);
+            setupRatingListeners();
+        }
+
+        // تحديث شريط التقدم
+        function updateProgress() {
+            const progress = (currentSection / totalSections) * 100;
+            document.getElementById('progressBar').style.width = `${progress}%`;
+            document.getElementById('currentStep').textContent = `${currentSection}/${totalSections}`;
+        }
+
+        // عرض القسم الحالي
+        function showSection(sectionNumber) {
+            // إخفاء جميع الأقسام
+            for (let i = 1; i <= totalSections; i++) {
+                document.getElementById(`section${i}`).style.display = 'none';
+            }
+
+            // عرض القسم الحالي
+            document.getElementById(`section${sectionNumber}`).style.display = 'block';
+
+            // تحديث أزرار التنقل
+            document.getElementById('prevBtn').style.display = sectionNumber === 1 ? 'none' : 'flex';
+            document.getElementById('nextBtn').style.display = sectionNumber === totalSections ? 'none' : 'flex';
+            document.getElementById('submitBtn').style.display = sectionNumber === totalSections ? 'flex' : 'none';
+        }
+
+        // الانتقال للقسم التالي
+        function nextSection() {
+            if (!validateCurrentSection()) {
+                showNotification('error', 'يرجى ملء جميع الحقول المطلوبة في هذا القسم');
+                return;
+            }
+
+            if (currentSection < totalSections) {
+                currentSection++;
+                updateProgress();
+                showSection(currentSection);
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            }
+        }
+
+        // الانتقال للقسم السابق
+        function prevSection() {
+            if (currentSection > 1) {
+                currentSection--;
+                updateProgress();
+                showSection(currentSection);
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            }
+        }
+
+        // التحقق من صحة القسم الحالي
+        function validateCurrentSection() {
+            const section = document.getElementById(`section${currentSection}`);
+            const requiredInputs = section.querySelectorAll('[required]');
+
+            for (const input of requiredInputs) {
+                if (!input.value) {
+                    input.style.borderColor = '#e74c3c';
+                    setTimeout(() => {
+                        input.style.borderColor = '#ddd';
+                    }, 2000);
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        // إعداد تقييمات النقر
+        function setupRatingListeners() {
+            document.querySelectorAll('.rating-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const parent = this.closest('.question-group');
+                    const hiddenInput = parent.querySelector('input[type="hidden"]');
+
+                    // إزالة النشاط من جميع العناصر في نفس المجموعة
+                    parent.querySelectorAll('.rating-item').forEach(el => {
+                        el.classList.remove('active');
+                    });
+
+                    // إضافة النشاط للعنصر المحدد
+                    this.classList.add('active');
+
+                    // تعيين القيمة في الحقل المخفي
+                    if (hiddenInput) {
+                        hiddenInput.value = this.dataset.value;
+                    }
+                });
+            });
+        }
+
+        // إظهار الإشعار
+        function showNotification(type, message) {
+            const notification = type === 'success' ?
+                document.getElementById('successNotification') :
+                document.getElementById('errorNotification');
+
+            if (type === 'error') {
+                document.getElementById('errorMessage').textContent = message;
+            }
+
+            notification.style.display = 'block';
+
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 5000);
+        }
+
+        // إرسال الاستبيان
+        document.getElementById('surveyForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            if (!validateCurrentSection()) {
+                showNotification('error', 'يرجى ملء جميع الحقول المطلوبة');
+                return;
+            }
+
+            // جمع البيانات
+            const formData = new FormData(this);
+            const data = {
+                name: formData.get('fullName'),
+                department: formData.get('department'),
+                email: formData.get('email'),
+                academicRank: formData.get('academicRank'),
+                teachingExperience: formData.get('teachingExperience'),
+                onlineCourses: formData.get('onlineCourses'),
+                teachingChallenges: formData.getAll('teachingChallenges'),
+                currentSystemEffectiveness: formData.get('currentSystemEffectiveness'),
+                reqLectures: formData.get('reqLectures'),
+                reqAttendance: formData.get('reqAttendance'),
+                reqMonitoring: formData.get('reqMonitoring'),
+                reqExams: formData.get('reqExams'),
+                reqActivities: formData.get('reqActivities'),
+                preferredAttendanceMethod: formData.get('preferredAttendanceMethod'),
+                cheatingPreventionEffectiveness: formData.get('cheatingPreventionEffectiveness'),
+                biggestObstacle: formData.get('biggestObstacle'),
+                attendanceProblems: formData.get('attendanceProblems'),
+                examProblems: formData.getAll('examProblems'),
+                techSupport: formData.get('techSupport'),
+                mostImportantFeature: formData.get('mostImportantFeature'),
+                offlineImportance: formData.get('offlineImportance'),
+                expectedChallenges: formData.get('expectedChallenges'),
+                managementRecommendations: formData.get('managementRecommendations'),
+                systemUsefulness: formData.get('systemUsefulness'),
+                developmentParticipation: formData.get('developmentParticipation'),
+                completed: true,
+                completionTime: Math.round((Date.now() - startTime) / 1000 / 60) // بالدقائق
+            };
+
+            try {
+                const response = await fetch('/api/survey/professor', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    // إخفاء النموذج
+                    document.getElementById('surveyForm').style.display = 'none';
+                    // إظهار إشعار النجاح
+                    showNotification('success', '');
+                } else {
+                    showNotification('error', result.message || 'حدث خطأ في الإرسال');
+                }
+            } catch (error) {
+                showNotification('error', 'حدث خطأ في الاتصال بالخادم');
+            }
+        });
+
+        // تهيئة الصفحة عند التحميل
+        window.onload = function() {
+            init();
+        };
+    </script>
+</body>
+
+</html>
