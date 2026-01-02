@@ -56,6 +56,29 @@
             font-weight: bold;
             color: #2c3e50;
         }
+        /* إشعار الخصوصية */
+        
+        .privacy-notice {
+            background: #e8f4fc;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            border-right: 5px solid #3498db;
+        }
+        
+        .privacy-notice h3 {
+            color: #1a2980;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .privacy-notice p {
+            color: #555;
+            margin-bottom: 8px;
+            padding-right: 10px;
+        }
         /* نموذج الاستبيان */
         
         .survey-form {
@@ -202,8 +225,7 @@
         
         textarea,
         select,
-        input[type="text"],
-        input[type="email"] {
+        input[type="text"] {
             width: 100%;
             padding: 15px;
             border: 2px solid #ddd;
@@ -224,6 +246,14 @@
         textarea {
             min-height: 120px;
             resize: vertical;
+        }
+        /* تلميحات الحقول */
+        
+        .field-hint {
+            color: #666;
+            font-size: 0.9em;
+            margin-top: 5px;
+            display: block;
         }
         /* أزرار التنقل */
         
@@ -338,28 +368,91 @@
             </div>
         </div>
 
+        <!-- إشعار الخصوصية -->
+        <div class="privacy-notice">
+            <h3>
+                <i class="fas fa-shield-alt"></i> خصوصية المشاركة
+            </h3>
+            <p>✅ <strong>جميع المعلومات الشخصية اختيارية</strong> - يمكنك المشاركة بدون اسم</p>
+            <p>✅ لا نطلب بريد إلكتروني أو رقم هاتف</p>
+            <p>✅ البيانات تجمع <strong>للغرض البحثي فقط</strong></p>
+            <p>✅ جميع الإجابات سرية ومشفرة</p>
+        </div>
+
+        <!-- فريق التطوير -->
+        <div class="team-section" style="
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+    padding: 20px;
+    border-radius: 15px;
+    margin-bottom: 25px;
+    text-align: center;
+">
+            <h3 style="margin-bottom: 15px; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                <i class="fas fa-users"></i> فريق تطوير نظام LMS المتكامل
+            </h3>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin: 20px 0;">
+                <div class="team-member">
+                    <div style="font-size: 2em;">👨‍💻</div>
+                    <div style="font-weight: bold;">سالم الحالمي</div>
+                    <div style="font-size: 0.9em; opacity: 0.9;"> مطور خوادم مشرف عام</div>
+                </div>
+
+                <div class="team-member">
+                    <div style="font-size: 2em;">👨‍🎓</div>
+                    <div style="font-weight: bold;">أحمد زيدان</div>
+                    <div style="font-size: 0.9em; opacity: 0.9;">مطور واجهات</div>
+                </div>
+
+                <div class="team-member">
+                    <div style="font-size: 2em;">🔧</div>
+                    <div style="font-weight: bold;">عمران عازب</div>
+                    <div style="font-size: 0.9em; opacity: 0.9;">مطور أنظمة</div>
+                </div>
+
+                <div class="team-member">
+                    <div style="font-size: 2em;">🎨</div>
+                    <div style="font-weight: bold;">محمد المريسي</div>
+                    <div style="font-size: 0.9em; opacity: 0.9;"> مصمم واجهات </div>
+                </div>
+
+                <div class="team-member">
+                    <div style="font-size: 2em;">📱</div>
+                    <div style="font-weight: bold;">بدر الدين عقبه</div>
+                    <div style="font-size: 0.9em; opacity: 0.9;">مطور تطبيقات</div>
+                </div>
+
+                <div class="team-member">
+                    <div style="font-size: 2em;">⚡</div>
+                    <div style="font-weight: bold;"> طارق الشامي </div>
+                    <div style="font-size: 0.9em; opacity: 0.9;">مطور </div>
+                </div>
+            </div>
+
+            <p style="margin-top: 15px; font-size: 0.95em; opacity: 0.9;">
+                <i class="fas fa-university"></i> كلية العلوم التطبيقيه النادرة - العميده د.\إلطاف المعمري
+            </p>
+        </div>
+
         <!-- نموذج الاستبيان -->
         <form id="surveyForm" class="survey-form">
-            <!-- القسم 1: المعلومات الشخصية -->
+            <!-- القسم 1: المعلومات الشخصية (معدل) -->
             <div class="form-section" id="section1">
                 <div class="section-title">
                     <i class="fas fa-chalkboard-teacher"></i>
-                    <h2>المعلومات الشخصية</h2>
+                    <h2>المعلومات الشخصية (اختياري)</h2>
                 </div>
 
                 <div class="question-group">
-                    <label class="question required">الاسم الكامل</label>
-                    <input type="text" id="fullName" name="fullName" required placeholder="أدخل اسمك الكامل">
+                    <label class="question">الاسم الكامل (اختياري)</label>
+                    <input type="text" id="fullName" name="fullName" placeholder="يمكنك ترك هذا الحقل فارغاً">
+                    <span class="field-hint">لحماية خصوصيتك، يمكنك المشاركة بدون اسم</span>
                 </div>
 
                 <div class="question-group">
                     <label class="question required">القسم/الكلية</label>
                     <input type="text" id="department" name="department" required placeholder="أدخل اسم القسم أو الكلية">
-                </div>
-
-                <div class="question-group">
-                    <label class="question required">البريد الإلكتروني الجامعي</label>
-                    <input type="email" id="email" name="email" required placeholder="name@university.edu.sa">
                 </div>
 
                 <div class="question-group">
@@ -964,9 +1057,8 @@
             // جمع البيانات
             const formData = new FormData(this);
             const data = {
-                name: formData.get('fullName'),
+                name: formData.get('fullName') || '', // اختياري
                 department: formData.get('department'),
-                email: formData.get('email'),
                 academicRank: formData.get('academicRank'),
                 teachingExperience: formData.get('teachingExperience'),
                 onlineCourses: formData.get('onlineCourses'),

@@ -88,6 +88,42 @@
             align-items: center;
             gap: 10px;
         }
+        /* قسم الفريق */
+        
+        .team-section {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border: 2px solid #3498db;
+        }
+        
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .team-member {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border-right: 3px solid #2ecc71;
+        }
+        
+        .team-role {
+            color: #e74c3c;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .team-name {
+            color: #2c3e50;
+            font-size: 1.1em;
+        }
         /* البطاقات */
         
         .cards-container {
@@ -286,6 +322,9 @@
                 flex-direction: column;
                 gap: 15px;
             }
+            .team-grid {
+                grid-template-columns: 1fr;
+            }
         }
         /* تأثيرات */
         
@@ -301,7 +340,8 @@
         }
         
         .card,
-        .feature {
+        .feature,
+        .team-member {
             animation: fadeIn 0.6s ease-out forwards;
             opacity: 0;
         }
@@ -357,7 +397,7 @@
 
             <div class="university">
                 <i class="fas fa-university"></i>
-                <h2>جامعة الملك سعود - كلية علوم الحاسب والمعلومات</h2>
+                <h2>الجامعة النجاح - كلية العلوم التطبيقية والتربوية</h2>
             </div>
 
             <h1>نظام استبيان بحثي متكامل</h1>
@@ -368,6 +408,55 @@
                     <i class="fas fa-project-diagram"></i> وصف المشروع البحثي
                 </div>
                 <p>دراسة استطلاعية لتقييم فعالية أنظمة إدارة التعلم الإلكتروني وقياس احتياجات المستخدمين من المنصة المتكاملة التي تشمل: إدارة المحاضرات، التحضير الآلي، مراقبة الاختبارات، وإدارة الأنشطة.</p>
+            </div>
+
+            <!-- قسم الفريق -->
+            <div class="team-section">
+                <div class="project-title">
+                    <i class="fas fa-users"></i> فريق البحث والتطوير
+                </div>
+
+                <div class="team-grid">
+                    <div class="team-member">
+                        <div class="team-role">المشرف الأكاديمي</div>
+                        <div class="team-name">د. أحمد قاسم</div>
+                    </div>
+
+                    <div class="team-member">
+                        <div class="team-role">قائد الفريق</div>
+                        <div class="team-name">سالم الحالمي</div>
+                    </div>
+
+                    <div class="team-member">
+                        <div class="team-role">عضو فريق</div>
+                        <div class="team-name">عمران عازب</div>
+                    </div>
+
+                    <div class="team-member">
+                        <div class="team-role">عضو فريق</div>
+                        <div class="team-name">محمد المريسي</div>
+                    </div>
+
+                    <div class="team-member">
+                        <div class="team-role">عضو فريق</div>
+                        <div class="team-name">أحمد زيدان</div>
+                    </div>
+
+                    <div class="team-member">
+                        <div class="team-role">عضو فريق</div>
+                        <div class="team-name">بدر الدين عقبة</div>
+                    </div>
+
+                    <div class="team-member">
+                        <div class="team-role">عضو فريق</div>
+                        <div class="team-name">طارق الشامي</div>
+                    </div>
+
+                    <div class="team-member">
+                        <div class="team-role">عضو فريق</div>
+                        <div class="team-name">سليمان الشامي</div>
+                    </div>
+                </div>
             </div>
 
             <a href="#surveys" class="start-btn">
@@ -453,7 +542,8 @@
         <!-- الفوتر -->
         <div class="footer">
             <p>© 2024 مشروع تخرج - منصة إدارة التعلم الإلكتروني المتكاملة (LMS)</p>
-            <p>فريق البحث: عبدالله سالم الحليمي | إشراف: د. أحمد</p>
+            <p>فريق التطوير: سالم الحالمي، عمران عازب، محمد المريسي، أحمد زيدان، بدر الدين عقبة، طارق الشامي، سليمان الشامي</p>
+            <p>الإشراف الأكاديمي: د. أحمد قاسم - كلية العلوم التطبيقية والتربوية</p>
             <p>جميع الحقوق محفوظة - للاستخدام البحثي والأكاديمي فقط</p>
         </div>
     </div>

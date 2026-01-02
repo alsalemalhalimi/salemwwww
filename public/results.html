@@ -51,6 +51,16 @@
             margin-bottom: 20px;
         }
         
+        .privacy-badge {
+            display: inline-block;
+            background: #9b59b6;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        
         .back-btn {
             display: inline-block;
             background: #3498db;
@@ -165,6 +175,10 @@
             border-right: 4px solid #3498db;
         }
         
+        .result-item.anonymous {
+            border-right-color: #9b59b6;
+        }
+        
         .result-header {
             display: flex;
             justify-content: space-between;
@@ -187,9 +201,25 @@
             background: #e74c3c;
         }
         
+        .result-type.anonymous {
+            background: #9b59b6;
+        }
+        
         .result-date {
             color: #666;
             font-size: 0.85em;
+        }
+        
+        .anonymous-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: #e8eaf6;
+            color: #3949ab;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            margin-right: 10px;
         }
         /* مقياس التقدم */
         
@@ -256,6 +286,9 @@
         <!-- الهيدر -->
         <div class="header">
             <h1><i class="fas fa-chart-bar"></i> نتائج البحث العلمي</h1>
+            <div class="privacy-badge">
+                <i class="fas fa-shield-alt"></i> نظام خصوصية متقدم - جميع المشاركات تحمي هوية المشاركين
+            </div>
             <p class="subtitle">تحليل بيانات استبيان نظام إدارة التعلم الإلكتروني المتكامل</p>
             <a href="/" class="back-btn">
                 <i class="fas fa-home"></i> العودة للرئيسية
@@ -285,10 +318,10 @@
                     <canvas id="overallSatisfactionChart"></canvas>
                 </div>
 
-                <!-- تقييم الميزات -->
+                <!-- أنواع المشاركة -->
                 <div class="chart-container">
-                    <h3 style="margin-bottom: 15px;"><i class="fas fa-cogs" style="color: #3498db;"></i> أولويات الميزات حسب رأي المشاركين</h3>
-                    <canvas id="featuresPriorityChart"></canvas>
+                    <h3 style="margin-bottom: 15px;"><i class="fas fa-user-secret" style="color: #9b59b6;"></i> أنواع المشاركة</h3>
+                    <canvas id="participationTypeChart"></canvas>
                 </div>
 
                 <!-- التوقعات -->
@@ -361,15 +394,17 @@
         // تحميل البيانات
         async function loadResults() {
             try {
-                const [dataResponse, analysisResponse] = await Promise.all([
+                const [dataResponse, analysisResponse, anonymousResponse] = await Promise.all([
                     fetch('/api/data/all'),
-                    fetch('/api/analysis')
+                    fetch('/api/analysis'),
+                    fetch('/api/stats/anonymous')
                 ]);
 
                 const data = await dataResponse.json();
                 const analysis = await analysisResponse.json();
+                const anonymousStats = await anonymousResponse.json();
 
-                updateQuickStats(data);
+                updateQuickStats(data, anonymousStats);
                 updateCharts(analysis);
                 updateParticipants(data);
                 updateDistribution(data);
@@ -381,7 +416,7 @@
         }
 
         // تحديث الإحصائيات السريعة
-        function updateQuickStats(data) {
+        function updateQuickStats(data, anonymousStats) {
             const quickStats = document.getElementById('quickStats');
 
             const stats = [{
@@ -390,20 +425,20 @@
                 icon: '👥',
                 color: '#667eea'
             }, {
-                label: 'متوسط وقت الإكمال',
-                value: (analysis.summary.averageTime || 0) + ' دقيقة',
-                icon: '⏱️',
+                label: 'المشاركة المجهولة',
+                value: anonymousStats.totalAnonymous,
+                icon: '🕵️',
+                color: '#9b59b6'
+            }, {
+                label: 'نسبة الخصوصية',
+                value: anonymousStats.anonymousPercentage + '%',
+                icon: '🔒',
                 color: '#2ecc71'
             }, {
-                label: 'معدل الإكمال',
-                value: (analysis.summary.completionRate || 0) + '%',
-                icon: '✅',
-                color: '#3498db'
-            }, {
                 label: 'التفاعل الإيجابي',
-                value: calculatePositiveFeedback(analysis) + '%',
+                value: calculatePositiveFeedback(data) + '%',
                 icon: '👍',
-                color: '#9b59b6'
+                color: '#3498db'
             }];
 
             quickStats.innerHTML = stats.map(stat => `
@@ -415,11 +450,15 @@
             `).join('');
         }
 
-        function calculatePositiveFeedback(analysis) {
-            const satisfaction = analysis.charts.satisfactionLevels || {};
-            const total = Object.values(satisfaction).reduce((a, b) => a + b, 0);
-            const positive = (satisfaction['مرتفع جداً'] || 0) + (satisfaction['مرتفع'] || 0);
-            return total > 0 ? ((positive / total) * 100).toFixed(1) : 0;
+        function calculatePositiveFeedback(data) {
+            const allResponses = [...data.students, ...data.professors];
+            const positiveCount = allResponses.filter(response => {
+                const score = response.overallSatisfaction || response.systemUsefulness;
+                return score >= 4;
+            }).length;
+
+            return allResponses.length > 0 ?
+                Math.round((positiveCount / allResponses.length) * 100) : 0;
         }
 
         // تحديث الرسوم البيانية
@@ -459,30 +498,29 @@
                 }
             });
 
-            // رسم بياني أولويات الميزات
-            const featuresCtx = document.getElementById('featuresPriorityChart').getContext('2d');
-            const featureLabels = Object.keys(analysis.charts.featureRankings || {});
-            const featureData = Object.values(analysis.charts.featureRankings || {});
+            // رسم بياني أنواع المشاركة
+            const participationCtx = document.getElementById('participationTypeChart').getContext('2d');
+            const participationData = {
+                named: analysis.charts.participationTypes ? .named || 0,
+                anonymous: analysis.charts.participationTypes ? .anonymous || 0
+            };
 
-            new Chart(featuresCtx, {
-                type: 'horizontalBar',
+            new Chart(participationCtx, {
+                type: 'pie',
                 data: {
-                    labels: featureLabels,
+                    labels: ['بأسماء', 'مجهولين'],
                     datasets: [{
-                        label: 'متوسط الأهمية (1-5)',
-                        data: featureData,
-                        backgroundColor: '#3498db',
-                        borderColor: '#2980b9',
+                        data: [participationData.named, participationData.anonymous],
+                        backgroundColor: ['#3498db', '#9b59b6'],
+                        borderColor: ['#2980b9', '#8e44ad'],
                         borderWidth: 1
                     }]
                 },
                 options: {
                     responsive: true,
-                    indexAxis: 'y',
-                    scales: {
-                        x: {
-                            beginAtZero: true,
-                            max: 5
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
                         }
                     }
                 }
@@ -493,28 +531,49 @@
         function updateParticipants(data) {
             const recentContainer = document.getElementById('recentParticipants');
             const allParticipants = [
-                ...data.students.map(s => ({...s,
-                    type: 'student'
+                ...data.students.map(s => ({
+                    ...s,
+                    type: 'student',
+                    isAnonymous: s.participationType === 'anonymous'
                 })),
-                ...data.professors.map(p => ({...p,
-                    type: 'professor'
+                ...data.professors.map(p => ({
+                    ...p,
+                    type: 'professor',
+                    isAnonymous: p.participationType === 'anonymous'
                 }))
             ].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)).slice(0, 8);
 
             recentContainer.innerHTML = allParticipants.map(participant => `
-                <div class="result-item">
+                <div class="result-item ${participant.isAnonymous ? 'anonymous' : ''}">
                     <div class="result-header">
-                        <span class="result-type ${participant.type}">
+                        <span class="result-type ${participant.type} ${participant.isAnonymous ? 'anonymous' : ''}">
                             ${participant.type === 'student' ? 'طالب' : 'هيئة تدريس'}
                         </span>
                         <span class="result-date">${participant.timestamp}</span>
                     </div>
-                    <div><strong>${participant.name || 'مجهول'}</strong></div>
-                    <div style="color: #666; font-size: 0.9em;">
+                    <div>
+                        <strong>${participant.name || 'مشارك مجهول'}</strong>
+                        ${participant.isAnonymous ? 
+                            '<span class="anonymous-badge"><i class="fas fa-user-secret"></i> مجهول</span>' : 
+                            ''}
+                    </div>
+                    <div style="color: #666; font-size: 0.9em; margin-top: 5px;">
                         ${participant.major || participant.department || 'غير محدد'}
+                        • الرضا: ${getSatisfactionLabel(participant.overallSatisfaction || participant.systemUsefulness)}
                     </div>
                 </div>
             `).join('') || '<div>لا توجد مشاركات حديثة</div>';
+        }
+
+        function getSatisfactionLabel(score) {
+            const labels = {
+                '5': 'مرتفع جداً',
+                '4': 'مرتفع',
+                '3': 'متوسط',
+                '2': 'منخفض',
+                '1': 'منخفض جداً'
+            };
+            return labels[score] || score || 'غير محدد';
         }
 
         // تحديث التوزيع

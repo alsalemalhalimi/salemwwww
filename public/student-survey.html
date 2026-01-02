@@ -56,6 +56,29 @@
             font-weight: bold;
             color: #2c3e50;
         }
+        /* إشعار الخصوصية */
+        
+        .privacy-notice {
+            background: #e8f4fc;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            border-right: 5px solid #3498db;
+        }
+        
+        .privacy-notice h3 {
+            color: #1a2980;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .privacy-notice p {
+            color: #555;
+            margin-bottom: 8px;
+            padding-right: 10px;
+        }
         /* نموذج الاستبيان */
         
         .survey-form {
@@ -149,10 +172,6 @@
             font-weight: bold;
         }
         
-        .option-label input:checked {
-            background-color: #2ecc71;
-        }
-        
         .option-content {
             margin-right: 10px;
             flex-grow: 1;
@@ -206,8 +225,7 @@
         
         textarea,
         select,
-        input[type="text"],
-        input[type="email"] {
+        input[type="text"] {
             width: 100%;
             padding: 15px;
             border: 2px solid #ddd;
@@ -228,6 +246,14 @@
         textarea {
             min-height: 120px;
             resize: vertical;
+        }
+        /* تلميحات الحقول */
+        
+        .field-hint {
+            color: #666;
+            font-size: 0.9em;
+            margin-top: 5px;
+            display: block;
         }
         /* أزرار التنقل */
         
@@ -326,20 +352,6 @@
                 justify-content: center;
             }
         }
-        /* تأثيرات */
-        
-        .form-section {
-            animation: slideIn 0.5s ease-out forwards;
-            opacity: 0;
-            transform: translateY(20px);
-        }
-        
-        @keyframes slideIn {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
     </style>
 </head>
 
@@ -356,28 +368,103 @@
             </div>
         </div>
 
+        <!-- إشعار الخصوصية -->
+        <div class="privacy-notice">
+            <h3>
+                <i class="fas fa-shield-alt"></i> خصوصية المشاركة
+            </h3>
+            <p>✅ <strong>جميع المعلومات الشخصية اختيارية</strong> - يمكنك المشاركة بدون اسم</p>
+            <p>✅ لا نطلب بريد إلكتروني أو رقم هاتف</p>
+            <p>✅ البيانات تجمع <strong>للغرض البحثي فقط</strong></p>
+            <p>✅ جميع الإجابات سرية ومشفرة</p>
+        </div>
+        <!-- فريق التطوير -->
+        <div class="team-section" style="
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+    padding: 20px;
+    border-radius: 15px;
+    margin-bottom: 25px;
+    text-align: center;
+">
+            <h3 style="margin-bottom: 15px; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                <i class="fas fa-users"></i> فريق تطوير نظام LMS المتكامل
+            </h3>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin: 20px 0;">
+                <div class="team-member">
+                    <div style="font-size: 2em;">👨‍💻</div>
+                    <div style="font-weight: bold;">سالم الحالمي</div>
+                    <div style="font-size: 0.9em; opacity: 0.9;">مطور رئيسي مشرف عام مطور خوادم</div>
+                </div>
+
+                <div class="team-member">
+                    <div style="font-size: 2em;">👨‍🎓</div>
+                    <div style="font-weight: bold;">أحمد زيدان</div>
+                    <div style="font-size: 0.9em; opacity: 0.9;">مطور واجهات</div>
+                </div>
+
+                <div class="team-member">
+                    <div style="font-size: 2em;">🔧</div>
+                    <div style="font-weight: bold;">عمران عازب</div>
+                    <div style="font-size: 0.9em; opacity: 0.9;">مطور أنظمة</div>
+                </div>
+
+                <div class="team-member">
+                    <div style="font-size: 2em;">🎨</div>
+                    <div style="font-weight: bold;">محمد المريسي</div>
+                    <div style="font-size: 0.9em; opacity: 0.9;"> مصمم واجهات وخوارزميات </div>
+                </div>
+
+                <div class="team-member">
+                    <div style="font-size: 2em;">📱</div>
+                    <div style="font-weight: bold;">بدر الدين عقبه</div>
+                    <div style="font-size: 0.9em; opacity: 0.9;">مطور تطبيقات</div>
+                </div>
+
+                <div class="team-member">
+                    <div style="font-size: 2em;">⚡</div>
+                    <div style="font-weight: bold;"> طارق الشامي </div>
+                    <div style="font-size: 0.9em; opacity: 0.9;">مطور </div>
+                </div>
+            </div>
+
+            <p style="margin-top: 15px; font-size: 0.95em; opacity: 0.9;">
+                <i class="fas fa-university"></i> كلية العلوم التطبيقيه النادرة - العميده د.\إلطاف المعمري
+            </p>
+        </div>
+
         <!-- نموذج الاستبيان -->
         <form id="surveyForm" class="survey-form">
-            <!-- القسم 1: المعلومات الشخصية -->
+            <!-- القسم 1: المعلومات الشخصية (معدل) -->
             <div class="form-section" id="section1">
                 <div class="section-title">
                     <i class="fas fa-user-graduate"></i>
-                    <h2>المعلومات الشخصية</h2>
+                    <h2>المعلومات الشخصية (اختياري)</h2>
                 </div>
 
                 <div class="question-group">
-                    <label class="question required">الاسم الكامل</label>
-                    <input type="text" id="fullName" name="fullName" required placeholder="أدخل اسمك الكامل">
+                    <label class="question">الاسم الكامل (اختياري)</label>
+                    <input type="text" id="fullName" name="fullName" placeholder="يمكنك ترك هذا الحقل فارغاً">
+                    <span class="field-hint">لحماية خصوصيتك، يمكنك المشاركة بدون اسم</span>
                 </div>
 
                 <div class="question-group">
-                    <label class="question required">البريد الإلكتروني</label>
-                    <input type="email" id="email" name="email" required placeholder="example@university.edu.sa">
-                </div>
-
-                <div class="question-group">
-                    <label class="question required">رقم الهاتف</label>
-                    <input type="text" id="phone" name="phone" required placeholder="05XXXXXXXX">
+                    <label class="question">النوع (اختياري للتحليل الإحصائي)</label>
+                    <div class="options-grid">
+                        <label class="option-label">
+                            <input type="radio" name="gender" value="ذكر">
+                            <span class="option-content">ذكر</span>
+                        </label>
+                        <label class="option-label">
+                            <input type="radio" name="gender" value="أنثى">
+                            <span class="option-content">أنثى</span>
+                        </label>
+                        <label class="option-label">
+                            <input type="radio" name="gender" value="أفضل عدم التحديد">
+                            <span class="option-content">أفضل عدم التحديد</span>
+                        </label>
+                    </div>
                 </div>
 
                 <div class="question-group">
@@ -389,9 +476,11 @@
                         <option value="نظم المعلومات">نظم المعلومات</option>
                         <option value="هندسة البرمجيات">هندسة البرمجيات</option>
                         <option value="أمن المعلومات">أمن المعلومات</option>
-                        <option value="تخصصات طبية">تخصصات طبية</option>
-                        <option value="تخصصات هندسية">تخصصات هندسية</option>
-                        <option value="تخصصات إنسانية">تخصصات إنسانية</option>
+                        <option value="طب">طب</option>
+                        <option value="هندسة">هندسة</option>
+                        <option value="علوم">علوم</option>
+                        <option value="إدارة أعمال">إدارة أعمال</option>
+                        <option value="علوم إنسانية">علوم إنسانية</option>
                         <option value="أخرى">أخرى</option>
                     </select>
                 </div>
@@ -535,7 +624,7 @@
 
                 <div class="question-group">
                     <label class="question required">ما مدى أهمية الميزات التالية بالنسبة لك؟</label>
-                    <p style="color: #666; margin-bottom: 20px;">(1 = غير مهم، 5 = مهم جداً)</p>
+                    <p class="field-hint">(1 = غير مهم، 5 = مهم جداً)</p>
 
                     <div class="feature-rating">
                         <div style="margin-bottom: 20px;">
@@ -959,9 +1048,8 @@
             // جمع البيانات
             const formData = new FormData(this);
             const data = {
-                name: formData.get('fullName'),
-                email: formData.get('email'),
-                phone: formData.get('phone'),
+                name: formData.get('fullName') || '', // اختياري
+                gender: formData.get('gender') || 'غير محدد',
                 major: formData.get('major'),
                 academicLevel: formData.get('academicLevel'),
                 currentSystemRating: formData.get('currentSystemRating'),
